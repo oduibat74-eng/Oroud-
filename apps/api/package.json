@@ -1,0 +1,20 @@
+{
+  "name": "@oroud/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "start": "tsx src/main.ts",
+    "migrate": "tsx src/migrate.ts"
+  },
+  "dependencies": {
+    "@oroud/extraction": "*",
+    "@oroud/shared": "*",
+    "fastify": "^5.6.0",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.15.0"
+  }
+}
