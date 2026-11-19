@@ -1,0 +1,18 @@
+# Local development services: Postgres with PostGIS, and Redis for job queues.
+services:
+  postgres:
+    image: postgis/postgis:16-3.5
+    environment:
+      POSTGRES_USER: oroud
+      POSTGRES_PASSWORD: oroud
+      POSTGRES_DB: oroud
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+volumes:
+  pgdata:

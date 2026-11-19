@@ -1,0 +1,14 @@
+{
+  "name": "@oroud/extraction",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.10.0",
+    "@oroud/shared": "*",
+    "zod": "^4.1.12"
+  }
+}
