@@ -160,6 +160,7 @@ CREATE TABLE offers (
   branch_id       bigint REFERENCES shop_branches(id),
   source_id       bigint REFERENCES sources(id),
   extraction_id   bigint REFERENCES extractions(id),
+  kind            text NOT NULL DEFAULT 'deal' CHECK (kind IN ('deal', 'listing')),
   title_en        text,
   title_ar        text,
   description     text,
@@ -319,5 +320,5 @@ INSERT INTO settings (key, value) VALUES
   ('ai_thresholds', '{"is_offer": 0.9, "price_or_discount": 0.8}'),
   ('freshness', '{"no_end_date_ask_day": 5, "no_end_date_hide_day": 7, "report_hide_count": 3}'),
   ('alerts', '{"max_per_day": 3}'),
-  ('ranking_weights', '{"freshness": 1, "end_date_certainty": 0.5, "distance": 1, "discount": 0.7, "interest": 0.8, "boost": 1, "reports": 1}'),
+  ('ranking_weights', '{"freshness": 1, "listing_penalty": 0.5, "end_date_certainty": 0.5, "distance": 1, "discount": 0.7, "interest": 0.8, "boost": 1, "reports": 1}'),
   ('boost_prices', '{"3_days": null, "7_days": null}');

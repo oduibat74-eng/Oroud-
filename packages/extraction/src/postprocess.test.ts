@@ -5,6 +5,7 @@ import type { ExtractionOutput } from "./schema.ts";
 function offer(overrides: Partial<ExtractionOutput> = {}): ExtractionOutput {
   return {
     is_offer: true,
+    kind: "deal",
     title_en: "Sports shoes 30% off",
     title_ar: "خصم 30% على الأحذية الرياضية",
     category: "shoes",
@@ -33,6 +34,25 @@ describe("postProcess", () => {
   });
   it("marks a missing end date as none", () => {
     expect(postProcess(offer({ ends_at: null, end_date_basis: "inferred" })).end_date_basis).toBe("none");
+  });
+});
+
+describe("kind", () => {
+  it("treats a plain priced item as a listing", () => {
+    // Test case 001: "ZARA / Size : XS-S / Price : 20 jd"
+    const out = postProcess(offer({ kind: null, price: 20, was_price: null, discount_pct: null }));
+    expect(out.kind).toBe("listing");
+    expect(decide(out, "instagram_connected")).toEqual({ action: "publish" });
+  });
+  it("corrects a listing that has a discount to a deal", () => {
+    expect(postProcess(offer({ kind: "listing" })).kind).toBe("deal");
+  });
+  it("clears kind when it is not an offer", () => {
+    expect(postProcess(offer({ is_offer: false })).kind).toBeNull();
+  });
+  it("drops an Instagram listing with no price", () => {
+    const out = postProcess(offer({ kind: "listing", price: null, was_price: null, discount_pct: null }));
+    expect(decide(out, "instagram_discovery").action).toBe("discard");
   });
 });
 

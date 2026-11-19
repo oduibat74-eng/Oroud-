@@ -35,6 +35,8 @@ const confidence = z.number().min(0).max(1);
  */
 export const ExtractionOutputSchema = z.object({
   is_offer: z.boolean(),
+  /** "deal": a discount or special price. "listing": an item for sale at a plain price. */
+  kind: z.enum(["deal", "listing"]).nullable(),
   title_en: z.string().nullable(),
   title_ar: z.string().nullable(),
   category: z.enum(CATEGORY_SLUGS).nullable(),

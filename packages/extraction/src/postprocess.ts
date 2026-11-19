@@ -28,6 +28,9 @@ export function postProcess(raw: ExtractionOutput): ProcessedExtraction {
     }
   }
   if (out.ends_at === null) out.end_date_basis = "none";
+  if (!out.is_offer) out.kind = null;
+  else if (out.discount_pct !== null || out.was_price !== null) out.kind = "deal";
+  else if (out.kind === null) out.kind = "listing";
   return out;
 }
 
@@ -50,6 +53,12 @@ export function decide(
       : { action: "review", reason: "not_offer" };
   }
   if (result.restricted.length > 0) return { action: "review", reason: "restricted_item" };
+  // A listing is only worth showing with a price the buyer can see.
+  if (result.kind === "listing" && result.price === null) {
+    return source.startsWith("instagram_")
+      ? { action: "discard", reason: "listing_without_price" }
+      : { action: "review", reason: "listing_without_price" };
+  }
   if (source === "whatsapp_shop" || source === "link_shop") return { action: "confirm_with_shop" };
   if (source === "admin") return { action: "review", reason: "admin_entry" };
   if (source === "link_buyer" || source === "instagram_mention") {
